@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>
+        Student Registration Form
+    </title>
+    <style>
+        #tbldata td{
+            border: 1px solid
+        }
+    </style>
+</head>
+<body>
+    <form id="regsForm">
+        <h1 class="Form" style="margin-bottom:70px; text-align:center">
+            Student Registration Form
+        </h1>
+
+        <table>
+            <tr>
+                <th align="left">
+                    Select Course
+                    <select id="course" onchange="fnEnablecourse(this) ">
+                        <option value="" id="ps"> Please select </option>
+                        <option value="sci">Science</option>
+                        <option value="com">Commerce</option>
+                        <option value="art">Arts</option>
+                        <option value="oth">Other</option>
+
+                    </select>
+                    <input type="text" id="oc" placeholder="Other" style="display: none;" />
+                    <input type="button" id="btnAdd" value="Add" name="add" style="display: none;" onclick="fnAddCourse()" />
+                    <input type="button" id="btncancel" value="Cancel" name="cancel" style="display: none;" onclick="fnCancelCourse()" />
+
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <span style="text-align: left;">Name</span>
+                    <input type="text" id="Fname" placeholder="First Name" onkeyup="return fnNameValidation()" />
+                    <input type="text" id="Mname" placeholder="Middle Name" />
+                    <!--<input type="text" id="Mname" placeholder="Middle Name" onchange="fnNameValidation()"/>-->
+                    <input type="text" id="Lname" placeholder="Last Name" />
+                    <!--<input type="text" id="Lname" placeholder="Last Name" onchange="fnNameValidation()"/>-->
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Date of Birth
+                    <input type="date" id="DOB" onchange="fnSetdate()" />
+                    <!--<input type="date" id="DOB" placeholder="DOB" onchange="fnSetdate()"/>-->
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Gender
+                    <input type="radio" id="MGen" name="gender" value="Male" onchange="EnableButton()" checked="checked" />Male
+                    <!-- <label for="Male"> Male </label> -->
+                    <input type="radio" id="FGen" name="gender" value="Female" onchange="EnableButton()"> Female
+                    <!-- <label for="Female"> Female </label>  -->
+                    <input type="radio" id="OGen" name="gender" value="Other" onchange="Disablebutton()"> Other
+                    <!-- <label for="Other"> Other </label> -->
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Mobile No
+                    <input type="text" id="Mobile" maxlength="10" onchange="fnMobileValidate()" />
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Email_id
+                    <input type="email" id="Email" onchange="fnEmailValidation()"/>
+                </th>
+            </tr>
+
+        </table>
+
+
+        <input type="button" id="btnSave" name="BtnSave" value="Save" onclick="fnValidateData(); addrow(); fndisplay_Clear()" />
+        <input type="button" style="margin-top:50px; margin-left:100px" name="BtnReset" value="Reset" onclick="fnReset()"/>
+
+        <table style="margin-top: 20px; margin-left: 50px; border: 2px solid; width: 90%; text-align: center ; display:none" id="tbldata">
+            <tr style="border: 1px solid">
+                <th>Sr.No.</th>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th> Gender </th>
+                <th>Mobile no.</th>
+                <th> Email_id </th>
+                <th> Selected Course </th>
+            </tr>
+        </table>
+
+        <input type="button" style="margin-top:20px; margin-left:100px; display:none" id="btnreset" name="BtnReset" value="Reset" onclick="fnResetpage()"/>
+
+        <script type="text/javascript">
+
+
+            var is_valid = false;
+            var table = document.getElementById("tbldata");
+
+            function fnNameValidation() {
+                debugger;
+
+                var name = document.getElementById('Fname').value;
+                var regex = /[a-z]{2,}/;
+
+                if (!regex.test(name)) {
+                    alert("Name is not in propper format")
+                    document.getElementById("Fname").focus();
+                    return true;
+                }
+            }
+
+            function fnMobileValidate()
+            {
+                var table = document.getElementById("tbldata");
+                var mobile = document.getElementById("Mobile");
+
+                for (var i = 0; i < table.rows.length; i++) {
+
+                    var cell = table.rows[i].cells[4];
+
+                    if (cell.innerText.trim() == mobile.value.trim()) {
+                        alert("Phone number already exist !!!")
+                        mobile.value = '';
+                        is_valid == false;
+                        return;
+                    }
+                }
+            }
+
+            function fnEmailValidation() {
+                var email = document.getElementById("Email");
+                var table = document.getElementById("tbldata");
+
+                for (var i = 0; i < table.rows.length; i++) {
+
+                    var cell = table.rows[i].cells[5];
+
+                    if (cell.innerText.trim() == email.value.trim()) {
+                        alert("Email_id already exist !!!")
+                        email.value = '';
+                        return;
+                    }
+                }
+            }
+
+            function fnResetpage() {
+
+                serialNumber = 1;
+ 
+                for (var i = table.rows.length - 1; i > 0; i--) {
+                    table.deleteRow(i);
+                }
+                document.getElementById("btnreset").style.display = 'none';
+                document.getElementById("tbldata").style.display = 'none'
+            }
+
+            function fnReset() {
+
+                document.getElementById("regsForm").reset();
+                document.getElementById("btnSave").disabled = false;
+                document.getElementById("oc").style.display = 'none';
+                document.getElementById("btnAdd").style.display = 'none';
+                document.getElementById("btncancel").style.display = 'none';
+            }
+
+
+            var serialNumber = 1;
+
+            function addrow() {
+
+                if (is_valid == true) {
+                    var tbl = document.getElementById("tbldata");
+                    var rowcount = tbl.rows.length;
+
+                    var row = tbl.insertRow(rowcount);
+
+                    var tdSrno = row.insertCell(0);
+                    tdSrno.innerText = serialNumber;
+                    serialNumber += 1;
+
+                    var tdName = row.insertCell(1);
+                    firstName = document.getElementById("Fname").value;
+                    middleName = document.getElementById("Mname").value;
+                    lastName = document.getElementById("Lname").value;
+
+                    tdName.innerText = firstName + " " + middleName + " " + lastName;
+
+                    var tdDOB = row.insertCell(2);
+                    tdDOB.innerText = document.getElementById("DOB").value;
+
+                    var tdGender = row.insertCell(3);
+                    var selectGender = document.querySelector('input[name="gender"]:checked');
+                    tdGender.innerText = selectGender.value;
+
+                    var tdMobile = row.insertCell(4);
+                    tdMobile.innerText = document.getElementById("Mobile").value;
+
+                    var tdEmail = row.insertCell(5);
+                    tdEmail.innerText = document.getElementById("Email").value;
+
+                    var courseSelect = document.getElementById("course");
+                    var x = courseSelect.selectedIndex;
+                    var y = courseSelect.options;
+                    var tdCourse = row.insertCell(6);
+                    tdCourse.innerText = y[x].text;
+
+                    document.getElementById("btnreset").style.display = '';
+                }
+
+            }
+
+            function fndisplay_Clear() {
+
+                if (is_valid == true) {
+
+                    document.getElementById("tbldata").style.display = '';
+                    document.getElementById("regsForm").reset();
+                }
+
+            }
+
+            function fnAddCourse() {
+
+                var option = document.createElement("option");
+                var trimvalue = oc.value.trim();
+
+                if (document.getElementById("oc").value == '') {
+                    alert("Kindly Enter course name");
+                }
+
+                else {
+                    var courseSelect = document.getElementById("course");
+
+                    option.text = trimvalue;
+                    option.value = trimvalue;
+                    courseSelect.add(option);
+                    document.getElementById("course").value = trimvalue;
+
+                    oc.value = '';
+
+                    var addB4this = "Other"
+                   // var x = courseSelect.selectedIndex;
+                    var y = courseSelect.options;
+
+                    for (i = 0; i < y.length; i++) {
+                        if (y[i].text == addB4this) {
+                            placed = y[i].index;
+                        }
+                    }
+                    courseSelect.insertBefore(option, courseSelect.options[placed]);
+
+                    document.getElementById("oc").style.display = 'none';
+                    document.getElementById("btnAdd").style.display = 'none';
+                    document.getElementById("btncancel").style.display = 'none';
+
+                    alert("course add successfully");
+                }
+            }
+
+
+            // Creating Function for setting Date limit
+
+            function fnSetdate() {
+
+                var dt = new Date("2023-09-14");
+                //console.log(dt);
+
+                var txtdt = document.getElementById("DOB");
+
+                var inputdate = new Date(txtdt.value);
+
+                if (inputdate.getTime() > dt.getTime()) {
+                    alert("Date format not acceptable")
+                    txtdt.value = '';
+                }
+            }
+
+            function fnCancelCourse()               // Created function for Cancel Button
+            {
+                document.getElementById("oc").style.display = 'none';
+                document.getElementById("btnAdd").style.display = 'none';
+                document.getElementById("btncancel").style.display = 'none';
+                document.getElementById("course").value = '';
+            }
+
+            // Created function for changing course once selected
+
+            function fnEnablecourse(answer) {
+
+                // var add = document.getElementById("course").text(other);
+
+                if (answer.value == "oth") {
+                    document.getElementById("oc").style.display = '';
+                    document.getElementById("btnAdd").style.display = '';
+                    document.getElementById("btncancel").style.display = '';
+                }
+                else {
+                    document.getElementById("oc").style.display = 'none'
+                    document.getElementById("btnAdd").style.display = 'none'
+                    document.getElementById("btncancel").style.display = 'none'
+                }
+            }
+
+            function Disablebutton()            // Created function for Disabling save button(Other)
+            {
+                if (document.getElementById("OGen").checked == true) {
+                    document.getElementById("btnSave").disabled = true;
+                }
+            }
+
+            // code by Yogesh
+
+            function EnableButton()                 //      Created function for Enabling save button(Male & Female)
+            {
+                //var element = event.srcElement
+
+                if (document.getElementById("OGen").checked == false) {
+                    document.getElementById("btnSave").disabled = false;
+                }
+            }
+
+            function fnValidateData()                  // Created function for validation all inputs parameter
+            {
+                var Fname = document.getElementById("Fname").value;
+                var Mname = document.getElementById("Mname").value;
+                var Lname = document.getElementById("Lname").value;
+                var DOB = document.getElementById("DOB").value;
+                var MGen = document.getElementById("MGen").checked;
+                //debugger;
+                //var gender = document.getElementByName("gender").value;
+
+
+
+                var FGen = document.getElementById("FGen").checked;
+                var OGen = document.getElementById("OGen").checked;
+                var Mobile = document.getElementById("Mobile").value;
+                var email = document.getElementById("Email").value;
+                var Course = document.getElementById("course").value;
+
+                var Error_message = "";          // Created empty variable for Error message
+
+                if (!Fname) {
+                    Error_message += "Kindly enter first name\n";
+                    is_valid = false;
+                }
+                if (!Mname) {
+                    Error_message += "Kindly enter middle name\n";
+                    is_valid = false;
+
+                }
+                if (!Lname) {
+                    Error_message += "Kindly enter last name\n";
+                    is_valid = false;
+
+                }
+                if (!DOB) {
+                    Error_message += "kindly enter Date of Birth\n";
+                    is_valid = false;
+
+                }
+                //if (!gender) {
+                if (!(MGen || FGen || OGen)) {
+                    Error_message += "Kindly choose the Gender\n";
+                    is_valid = false;
+
+                }
+                if (!Mobile) {
+                    Error_message += "kindly enter the Mobile Number\n";
+                    is_valid = false;
+
+                }
+                if (!email) {
+                    Error_message += "kindly entere the email id\n";
+                    is_valid = false;
+
+                }
+                if (!Course) {
+                    Error_message += "Kindly enter the course name\n";
+                    is_valid = false;
+
+                }
+
+                if (Error_message != "") {
+                    alert(Error_message);
+                }
+                else if (Error_message == "") {
+                    is_valid = true;
+
+                    alert("Data added sucessfully !!!");
+                }
+            }
+
+        </script>
+    </form>
+
+</body>
+</html>

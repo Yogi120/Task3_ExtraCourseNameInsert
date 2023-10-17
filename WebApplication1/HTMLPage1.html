@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <form>
+        <h1 class="Form" style="margin-bottom:70px; text-align:center">
+            Student Registration Form
+        </h1>
+
+        <table>
+            <tr>
+                <th align="left">
+                    Select Course
+                    <select id="course" onchange="fnEnablecourse(this)" class="course">
+                        <option value="" id="ps"> Please select </option>
+                        <option value="1">Science</option>
+                        <option value="2">Commerce</option>
+                        <option value="3">Arts</option>
+                        <option value="4">Other</option>
+                    </select>
+                    <input type="text" id="oc" placeholder="Other" style="display: none;"></input>
+                    <input type="button" id="btnAdd" value="Add" name="add" style="display: none;" />
+                    <input type="button" id="btncancel" value="Cancel" name="cancel" style="display: none;" onclick="fnCancelCourse()" />
+
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <span style="text-align: left;">Name</span>
+                    <input type="text" id="Fname" placeholder="First Name" />
+                    <input type="text" id="Mname" placeholder="Middle Name" />
+                    <input type="text" id="Lname" placeholder="Last Name" />
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Date of Birth
+                    <input type="date" id="DOB" placeholder="DOB" onchange="fnSetdate()"/>
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Gender
+
+                    <input type="radio" id="MGen" name="gender" value="Male" onchange="EnableButton()">Male</input>
+                    <!-- <label for="Male"> Male </label> -->
+                    <input type="radio" id="FGen" name="gender" value="Female" onchange="EnableButton()"> Female</input>
+                    <!-- <label for="Female"> Female </label>  -->
+                    <input type="radio" id="OGen" name="gender" value="Other" onchange="Disablebutton()"> Other</input>
+                    <!-- <label for="Other"> Other </label> -->
+
+
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Mobile No
+                    <input type="number" id="Mobile" />
+                </th>
+            </tr>
+
+            <tr>
+                <th align="left">
+                    Email_id
+                    <input type="email" id="Email" />
+                </th>
+            </tr>
+
+
+
+        </table>
+
+        <button class="Reset" style="margin-top:50px; margin-right:20px" > Reset </button>
+        <input type="button" id="btnSave" name="BtnSave" value="Save" onclick="fnValidate()" />
+
+        <script type="text/javascript">
+
+            function fnSetdate()
+            {
+                alert();
+                debugger;
+
+                var dt = new Date(2020, 9, 10);
+                console.log(dt);
+                var txtdt = document.getElementById("DOB");
+                console.log(txtdt);
+                var inputdate = new Date(txtdt.value);
+                console.log(inputdate);
+                if (inputdate.getTime() > dt.getTime()) {
+                    alert("Date format not acceptable")
+                    txtdt.value = '';
+                    
+                    return;
+                }
+           
+            }
+
+                function fnCancelCourse()               // Created function for Cancel Button
+                {
+                    document.getElementById("oc").style.display = 'none';
+                    document.getElementById("btnAdd").style.display = 'none';
+                    document.getElementById("btncancel").style.display = 'none';
+                    document.getElementById("course").value = '' ;
+                }
+
+                function fnEnablecourse(answer){        // Created function for changing course once selected
+                    if(answer.value==4){
+                        document.getElementById("oc").style.display = '';
+                        document.getElementById("btnAdd").style.display = '';
+                        document.getElementById("btncancel").style.display = '';
+                    }
+                    else{
+                        document.getElementById("oc").style.display = 'none'
+                        document.getElementById("btnAdd").style.display = 'none'
+                        document.getElementById("btncancel").style.display = 'none'
+                    }
+                }
+
+                function Disablebutton()            // Created function for Disabling save button(Other)
+                {
+                    if (document.getElementById("OGen").checked==true){
+                        document.getElementById("btnSave").disabled=true;
+                    }
+
+                    // code by Azim
+                    // else if ((document.getElementById("MGen").checked==true) || (document.getElementById("FGen").checked=true) )
+                    // {
+                    //     document.getElementById("btnSave").disabled=false;
+                    // }
+                }
+
+                    // code by Yogesh
+
+                function EnableButton()                 //      Created function for Enabling save button(Male & Female)
+                {
+                    var element = event.srcElement
+
+                    if (document.getElementById("OGen").checked == false)
+                    {
+                        document.getElementById("btnSave").disabled = false;
+                    }
+                    console.log(element)
+                }
+
+                function fnValidate()                  // Created function for validation all inputs parameter
+                {
+                    var Fname = document.getElementById("Fname").value;
+                    var Mname = document.getElementById("Mname").value;
+                    var Lname = document.getElementById("Lname").value;
+                    var DOB = document.getElementById("DOB").value;
+                    var MGen = document.getElementById("MGen").checked;
+                    var FGen= document.getElementById("FGen").checked;
+                    var OGen = document.getElementById("OGen").checked;
+                    var Mobile = document.getElementById("Mobile").value;
+                    var email = document.getElementById("Email").value;
+                    var Course = document.getElementById("course").value;
+
+                    var Error_message = "";          // Created empty variable for Error message
+
+                    if(!Fname){
+                        Error_message += "Kindly enter first name\n";
+                    }
+                    if(!Mname){
+                        Error_message += "Kindly enter middle name\n";
+                    }
+                    if(!Lname){
+                        Error_message += "Kindly enter last name\n";
+                    }
+                    if(!DOB){
+                        Error_message += "kindly enter Date of Birth\n";
+                    }
+                    if(!(MGen || FGen || OGen)){
+                        Error_message += "Kindly choose the Gender\n";
+                    }
+                    if(!Mobile) {
+                        Error_message += "kindly enter the Mobile Number\n";
+                    }
+                    if(!email){
+                        Error_message += "kindly entere the email id\n";
+                    }
+                    if(!Course){
+                        Error_message += "Kindly enter the course name\n";
+                    }
+
+                    if(Error_message){
+                        alert(Error_message);
+                    }
+                    else{
+                        alert("Data added sucessfully !!!");
+                    }
+                }
+
+        </script>
+    </form>
+
+</body>
+</html>
